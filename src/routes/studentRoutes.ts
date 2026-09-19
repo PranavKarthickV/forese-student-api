@@ -19,6 +19,13 @@ const router = Router();
 // Middleware to verify database connectivity before executing database operations
 const checkDbConnection = (req: Request, res: Response, next: NextFunction): void => {
   if (mongoose.connection.readyState !== 1) {
+    // If it's a browser request to render the Student Records CRUD dashboard, allow it through
+    // so the user sees the interactive dashboard and its connection error/retry state.
+    if (req.method === 'GET' && req.path === '/' && req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+      next();
+      return;
+    }
+
     if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.status(500).send(

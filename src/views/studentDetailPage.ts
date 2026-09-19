@@ -1,8 +1,17 @@
 import { renderPageLayout } from './layout';
-import { StudentItem } from './studentsPage';
+
+export interface StudentDetailItem {
+  _id: string;
+  name: string;
+  rollNumber: string;
+  department: string;
+  year: number;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
 
 export interface StudentDetailPageOptions {
-  student: StudentItem;
+  student: StudentDetailItem;
 }
 
 /**

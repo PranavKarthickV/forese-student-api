@@ -54,26 +54,14 @@ export const getAllStudents = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
+  if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.status(200).send(getStudentsPageHtml());
+    return;
+  }
+
   try {
     const students = await Student.find().sort({ createdAt: -1 });
-
-    if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      res.status(200).send(
-        getStudentsPageHtml({
-          students: students.map((s) => ({
-            _id: s._id.toString(),
-            name: s.name,
-            rollNumber: s.rollNumber,
-            department: s.department,
-            year: s.year,
-            createdAt: s.createdAt,
-            updatedAt: s.updatedAt,
-          })),
-        })
-      );
-      return;
-    }
 
     res.status(200).json({
       success: true,
