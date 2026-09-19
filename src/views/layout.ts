@@ -7,8 +7,8 @@ export interface LayoutOptions {
 }
 
 /**
- * Common HTML layout with unified dark developer aesthetic, navigation, and styling.
- * Strictly adheres to project branding: "Student Records API".
+ * Editorial + Creative Tech layout for Student Records API.
+ * Combines high-end typography, asymmetric compositions, and refined developer styling.
  */
 export const renderPageLayout = (options: LayoutOptions): string => {
   const { title, activeNav = 'none', content, extraHead = '', extraScripts = '' } = options;
@@ -18,43 +18,35 @@ export const renderPageLayout = (options: LayoutOptions): string => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} | Student Records API</title>
-  <meta name="description" content="REST API for managing student records with strict validation, MongoDB persistence, and full CRUD support." />
+  <title>${title} — Student Records API</title>
+  <meta name="description" content="High-craft REST API and database interface for managing student records." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-primary: #07090e;
-      --bg-surface: #0b0f19;
-      --bg-card: rgba(13, 17, 28, 0.85);
-      --bg-card-hover: rgba(19, 25, 41, 0.95);
-      --bg-input: rgba(15, 23, 42, 0.8);
-      --border-subtle: rgba(99, 102, 241, 0.2);
-      --border-card: rgba(99, 102, 241, 0.22);
-      --border-highlight: rgba(6, 182, 212, 0.4);
+      --bg-canvas: #050608;
+      --bg-surface: #0a0d13;
+      --bg-surface-elevated: #0f141f;
+      --bg-surface-hover: #131a26;
+      --bg-input: #07090e;
+      --border-line: rgba(255, 255, 255, 0.08);
+      --border-line-subtle: rgba(255, 255, 255, 0.04);
+      --border-line-hover: rgba(255, 255, 255, 0.16);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --accent-indigo: #6366f1;
       --accent-indigo-hover: #4f46e5;
+      --accent-indigo-subtle: rgba(99, 102, 241, 0.1);
+      --accent-indigo-border: rgba(99, 102, 241, 0.28);
       --accent-cyan: #06b6d4;
-      --accent-cyan-light: #22d3ee;
-      --method-get-bg: rgba(6, 182, 212, 0.12);
-      --method-get-text: #22d3ee;
-      --method-get-border: rgba(6, 182, 212, 0.3);
-      --method-post-bg: rgba(34, 197, 94, 0.12);
-      --method-post-text: #4ade80;
-      --method-post-border: rgba(34, 197, 94, 0.3);
-      --method-put-bg: rgba(245, 158, 11, 0.12);
-      --method-put-text: #fbbf24;
-      --method-put-border: rgba(245, 158, 11, 0.3);
-      --method-delete-bg: rgba(244, 63, 94, 0.12);
-      --method-delete-text: #fb7185;
-      --method-delete-border: rgba(244, 63, 94, 0.3);
-      --status-green: #22c55e;
-      --status-red: #ef4444;
+      --accent-cyan-subtle: rgba(6, 182, 212, 0.1);
+      --status-green: #10b981;
+      --status-red: #f43f5e;
+      --radius-sm: 4px;
+      --radius: 6px;
     }
 
     * {
@@ -65,377 +57,263 @@ export const renderPageLayout = (options: LayoutOptions): string => {
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-primary);
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 45%),
-        radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.65) 0%, transparent 100%);
-      background-attachment: fixed;
+      background-color: var(--bg-canvas);
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 28px 28px;
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      line-height: 1.6;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    .nav-header {
+    /* Editorial Header */
+    .site-header {
       width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-line);
+      background: rgba(5, 6, 8, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 50;
     }
 
-    .nav-container {
-      max-width: 1040px;
+    .header-content {
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 0.85rem 1.5rem;
+      padding: 0 1.75rem;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 1.5rem;
     }
 
-    .brand-link {
+    .brand-identity {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: -0.02em;
-      transition: opacity 0.2s ease;
+      gap: 1.5rem;
     }
 
-    .brand-link:hover {
-      opacity: 0.9;
-    }
-
-    .brand-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
-      color: #ffffff;
+    .brand-tag {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 0.85rem;
-      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.15s ease;
     }
 
-    .nav-links {
+    .brand-tag:hover {
+      color: var(--accent-indigo);
+    }
+
+    .brand-tag-arrow {
+      color: var(--accent-indigo);
+      font-weight: 700;
+    }
+
+    .nav-menu {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .nav-link {
+    .nav-item {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 0.825rem;
       font-weight: 500;
-      padding: 0.45rem 0.85rem;
-      border-radius: 8px;
-      transition: all 0.2s ease;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      transition: color 0.15s ease, background 0.15s ease;
     }
 
-    .nav-link:hover {
+    .nav-item:hover {
       color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-item.active {
+      color: var(--text-main);
+      font-weight: 600;
       background: rgba(255, 255, 255, 0.06);
     }
 
-    .nav-link.active {
-      color: var(--accent-cyan-light);
-      background: rgba(6, 182, 212, 0.12);
-      border: 1px solid rgba(6, 182, 212, 0.25);
-    }
-
-    .nav-right {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1.25rem;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .status-indicator-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-green);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+    }
+
+    .status-indicator-dot.offline {
+      background: var(--status-red);
+      box-shadow: 0 0 6px rgba(244, 63, 94, 0.5);
     }
 
     .github-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.4rem 0.85rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      color: var(--text-main);
+      gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
       text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      transition: color 0.15s ease;
     }
 
     .github-link:hover {
-      background: rgba(99, 102, 241, 0.2);
-      border-color: rgba(99, 102, 241, 0.45);
-      color: #ffffff;
-      transform: translateY(-1px);
+      color: var(--text-main);
     }
 
-    .github-icon {
-      width: 15px;
-      height: 15px;
-      fill: currentColor;
-    }
-
-    .main-wrapper {
+    /* Page Layout */
+    .page-wrapper {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2.25rem 1.25rem;
-    }
-
-    .container {
       width: 100%;
-      max-width: 1040px;
+      max-width: 1180px;
       margin: 0 auto;
+      padding: 2.5rem 1.75rem 4rem;
     }
 
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 20px;
-      padding: 2.5rem 2.25rem;
-      box-shadow: 
-        0 25px 50px -12px rgba(0, 0, 0, 0.75),
-        0 0 35px rgba(99, 102, 241, 0.1);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 2rem;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #6366f1, #06b6d4, #3b82f6);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.35rem 0.85rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .badge-api-online {
-      background: rgba(6, 182, 212, 0.15);
-      color: var(--accent-cyan-light);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-    }
-
-    .badge-db-connected {
-      color: #4ade80;
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      background: rgba(34, 197, 94, 0.12);
-    }
-
-    .badge-db-disconnected {
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      background: rgba(239, 68, 68, 0.12);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      position: relative;
-    }
-
-    .dot-cyan {
-      background: var(--accent-cyan-light);
-      box-shadow: 0 0 10px var(--accent-cyan-light);
-      animation: pulse-glow 2s infinite ease-in-out;
-    }
-
-    .dot-green {
-      background: var(--status-green);
-      box-shadow: 0 0 10px var(--status-green);
-      animation: pulse-glow 2s infinite ease-in-out;
-    }
-
-    .dot-red {
-      background: var(--status-red);
-      box-shadow: 0 0 10px var(--status-red);
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-
-    .method {
-      display: inline-block;
-      min-width: 64px;
-      text-align: center;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.725rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
-    }
-
-    .method-get {
-      background: var(--method-get-bg);
-      color: var(--method-get-text);
-      border: 1px solid var(--method-get-border);
-    }
-
-    .method-post {
-      background: var(--method-post-bg);
-      color: var(--method-post-text);
-      border: 1px solid var(--method-post-border);
-    }
-
-    .method-put {
-      background: var(--method-put-bg);
-      color: var(--method-put-text);
-      border: 1px solid var(--method-put-border);
-    }
-
-    .method-delete {
-      background: var(--method-delete-bg);
-      color: var(--method-delete-text);
-      border: 1px solid var(--method-delete-border);
-    }
-
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
       padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 500;
+      border-radius: var(--radius-sm);
+      font-size: 0.825rem;
+      font-weight: 600;
       text-decoration: none;
       cursor: pointer;
-      transition: all 0.2s ease;
       font-family: inherit;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
+    .btn-indigo {
+      background: var(--accent-indigo);
       color: #ffffff;
-      border: none;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+      border-color: var(--accent-indigo-hover);
     }
 
-    .btn-primary:hover {
-      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
-      transform: translateY(-1px);
+    .btn-indigo:hover {
+      background: var(--accent-indigo-hover);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-line);
       color: var(--text-main);
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border-line-hover);
     }
 
-    .btn-test {
-      padding: 0.3rem 0.75rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--accent-cyan-light);
-      background: rgba(6, 182, 212, 0.1);
-      border: 1px solid rgba(6, 182, 212, 0.25);
-      border-radius: 6px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .btn-test:hover {
-      background: rgba(6, 182, 212, 0.25);
-      border-color: var(--accent-cyan-light);
-      color: #ffffff;
-    }
-
-    .btn-copy {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.75rem;
-      font-family: inherit;
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid transparent;
       color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .btn-copy:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .btn-ghost:hover {
       color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
     }
 
-    .footer {
-      width: 100%;
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 1.5rem 1.25rem 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      font-size: 0.825rem;
-      color: var(--text-dim);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    .btn-danger {
+      background: #991b1b;
+      color: #ffffff;
+      border-color: #b91c1c;
     }
 
-    .footer a {
-      color: var(--accent-indigo);
-      text-decoration: none;
-      transition: color 0.2s ease;
+    .btn-danger:hover {
+      background: #b91c1c;
     }
 
-    .footer a:hover {
-      color: var(--accent-cyan-light);
+    /* Method Badges */
+    .method {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.675rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      letter-spacing: 0.02em;
     }
 
+    .method-get {
+      background: var(--accent-cyan-subtle);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.25);
+    }
+
+    .method-post {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .method-put {
+      background: rgba(245, 158, 11, 0.1);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .method-delete {
+      background: rgba(244, 63, 94, 0.1);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.25);
+    }
+
+    /* Toast */
     .toast {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: #1e1b4b;
-      border: 1px solid var(--accent-indigo);
-      color: #e0e7ff;
-      padding: 0.65rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      background: #0f141f;
+      border: 1px solid var(--border-line-hover);
+      color: var(--text-main);
+      padding: 0.65rem 1.15rem;
+      border-radius: var(--radius);
+      font-size: 0.825rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
       opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.25s ease;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
       pointer-events: none;
-      z-index: 100;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
 
     .toast.show {
@@ -443,24 +321,55 @@ export const renderPageLayout = (options: LayoutOptions): string => {
       transform: translateY(0);
     }
 
-    @media (max-width: 640px) {
-      .nav-container {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0.75rem 1rem;
+    /* Editorial Footer */
+    .site-footer {
+      width: 100%;
+      border-top: 1px solid var(--border-line);
+      background: rgba(5, 6, 8, 0.8);
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.775rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-indigo);
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        padding: 0 1rem;
       }
-      .nav-links {
-        width: 100%;
-        overflow-x: auto;
-        padding-bottom: 0.25rem;
+      .page-wrapper {
+        padding: 1.75rem 1rem 3rem;
       }
-      .nav-right {
+      .nav-menu {
         display: none;
       }
-      .card {
-        padding: 1.75rem 1.25rem;
-      }
-      .footer {
+      .footer-content {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -469,42 +378,51 @@ export const renderPageLayout = (options: LayoutOptions): string => {
   ${extraHead}
 </head>
 <body>
-  <header class="nav-header">
-    <div class="nav-container">
-      <a href="/" class="brand-link" title="Student Records API Dashboard">
-        <span class="brand-badge">⚡</span>
-        <span>Student Records API</span>
-      </a>
-      <nav class="nav-links">
-        <a href="/" class="nav-link ${activeNav === 'dashboard' ? 'active' : ''}">Dashboard</a>
-        <a href="/api/health" class="nav-link ${activeNav === 'health' ? 'active' : ''}">Health</a>
-        <a href="/api/students" class="nav-link ${activeNav === 'students' ? 'active' : ''}">Students</a>
-      </nav>
-      <div class="nav-right">
+  <header class="site-header">
+    <div class="header-content">
+      <div class="brand-identity">
+        <a href="/" class="brand-tag">
+          <span class="brand-tag-arrow">&gt;</span>
+          <span>student.records</span>
+        </a>
+        <nav class="nav-menu">
+          <a href="/" class="nav-item ${activeNav === 'dashboard' ? 'active' : ''}">Overview</a>
+          <a href="/api/students" class="nav-item ${activeNav === 'students' ? 'active' : ''}">Students</a>
+          <a href="/api/health" class="nav-item ${activeNav === 'health' ? 'active' : ''}">Health</a>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <div class="status-pill" id="header-status">
+          <span class="status-indicator-dot" id="header-dot"></span>
+          <span id="header-status-text">MongoDB Connected</span>
+        </div>
         <a href="https://github.com/PranavKarthickV/forese-student-api" target="_blank" rel="noopener noreferrer" class="github-link">
-          <svg class="github-icon" viewBox="0 0 24 24">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          GitHub
+          GitHub &rarr;
         </a>
       </div>
     </div>
   </header>
 
-  <main class="main-wrapper">
-    <div class="container">
-      ${content}
-    </div>
+  <main class="page-wrapper">
+    ${content}
   </main>
 
-  <footer class="footer">
-    <span>Student Records API &bull; REST Service</span>
-    <a href="https://github.com/PranavKarthickV/forese-student-api" target="_blank" rel="noopener noreferrer">
-      View on GitHub &rarr;
-    </a>
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div>student.records &bull; REST API &bull; Node.js &bull; TypeScript &bull; MongoDB</div>
+      <div class="footer-links">
+        <a href="/api/health" target="_blank">Health Status</a>
+        <a href="/api/students?format=json" target="_blank">Raw JSON</a>
+        <a href="https://github.com/PranavKarthickV/forese-student-api" target="_blank" rel="noopener noreferrer">Source Code</a>
+      </div>
+    </div>
   </footer>
 
-  <div id="toast" class="toast">Copied to clipboard!</div>
+  <div id="toast" class="toast">
+    <span style="color: var(--status-green);">&check;</span>
+    <span id="toast-text">Copied</span>
+  </div>
 
   <script>
     function copyToClipboard(text) {
@@ -518,12 +436,13 @@ export const renderPageLayout = (options: LayoutOptions): string => {
 
     function showToast(message) {
       const toast = document.getElementById('toast');
-      if (toast) {
-        toast.textContent = message;
+      const toastText = document.getElementById('toast-text');
+      if (toast && toastText) {
+        toastText.textContent = message;
         toast.classList.add('show');
         setTimeout(() => {
           toast.classList.remove('show');
-        }, 2000);
+        }, 2200);
       }
     }
   </script>

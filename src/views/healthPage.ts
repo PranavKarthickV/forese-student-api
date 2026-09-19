@@ -8,7 +8,7 @@ export interface HealthPageOptions {
 }
 
 /**
- * Renders the browser-friendly Health Dashboard page for GET /api/health.
+ * Renders the Editorial + Creative Tech Health Diagnostics page for GET /api/health.
  */
 export const getHealthPageHtml = (options: HealthPageOptions): string => {
   const { status, timestamp, uptime, database } = options;
@@ -17,103 +17,76 @@ export const getHealthPageHtml = (options: HealthPageOptions): string => {
   const isDbConnected = database === 'connected';
 
   const content = `
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <a href="/" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
-            &larr; Back to Dashboard
-          </a>
+    <!-- Top Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 2rem; border-bottom: 1px solid var(--border-line); margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.725rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-indigo); margin-bottom: 0.75rem;">
+          // SYSTEM DIAGNOSTICS
         </div>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <button class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;" onclick="fetchHealth()" id="refresh-btn">
-            ↻ Refresh Status
-          </button>
-          <a href="/api/health?format=json" target="_blank" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
-            Raw JSON &rarr;
-          </a>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 2.25rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-          <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.025em; color: #ffffff;">
-            API Health & Diagnostics
-          </h1>
-          <span class="badge ${isHealthy ? 'badge-api-online' : 'badge-db-disconnected'}" id="status-badge">
-            <span class="dot ${isHealthy ? 'dot-cyan' : 'dot-red'}"></span>
-            ${status}
-          </span>
-        </div>
-        <p style="font-size: 1rem; color: var(--text-muted);">
-          Real-time service health, server uptime, and database connectivity monitoring
+        <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 3rem; font-weight: 700; line-height: 1; letter-spacing: -0.04em; color: #ffffff; text-transform: uppercase; margin-bottom: 0.5rem;">
+          HEALTH STATUS
+        </h1>
+        <p style="font-size: 0.95rem; color: var(--text-muted);">
+          Operational telemetry and database availability.
         </p>
       </div>
 
-      <!-- Health Metrics Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
-        <!-- Server Status -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem 1.5rem;">
-          <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.5rem;">
-            Server Status
-          </div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: ${isHealthy ? '#22d3ee' : '#f87171'};" id="metric-status">
-            ${status}
-          </div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
-            HTTP 200 OK
-          </div>
-        </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="btn btn-secondary" onclick="fetchHealth()" id="refresh-btn">
+          ↻ Refresh
+        </button>
+        <a href="/api/health?format=json" target="_blank" class="btn btn-secondary">
+          Raw JSON &rarr;
+        </a>
+      </div>
+    </div>
 
-        <!-- Database Connection -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem 1.5rem;">
-          <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.5rem;">
-            Database Status
-          </div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: ${isDbConnected ? '#4ade80' : '#f87171'}; text-transform: capitalize;" id="metric-db">
-            ${database}
-          </div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
-            MongoDB Connection
-          </div>
+    <!-- Health Metrics Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+      <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-line); border-radius: var(--radius); padding: 1.25rem 1.5rem;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.5rem;">
+          API STATUS
         </div>
-
-        <!-- System Uptime -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem 1.5rem;">
-          <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.5rem;">
-            Server Uptime
-          </div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #a5b4fc; font-family: 'JetBrains Mono', monospace;" id="metric-uptime">
-            ${uptime}
-          </div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
-            Time since last boot
-          </div>
-        </div>
-
-        <!-- Last Checked -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem 1.5rem;">
-          <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.5rem;">
-            Timestamp
-          </div>
-          <div style="font-size: 0.95rem; font-weight: 600; color: #f8fafc; font-family: 'JetBrains Mono', monospace; word-break: break-all;" id="metric-timestamp">
-            ${timestamp}
-          </div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
-            ISO 8601 UTC
-          </div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: ${isHealthy ? 'var(--status-green)' : 'var(--status-red)'};" id="metric-status">
+          ${status}
         </div>
       </div>
 
-      <!-- Live JSON Preview -->
-      <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem 1.5rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted);">
-            API Response Payload
-          </span>
-          <button class="btn-copy" onclick="copyToClipboard(document.getElementById('json-preview').textContent)">Copy JSON</button>
+      <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-line); border-radius: var(--radius); padding: 1.25rem 1.5rem;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.5rem;">
+          DATABASE
         </div>
-        <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.825rem; color: #67e8f9; background: rgba(0, 0, 0, 0.4); padding: 1rem; border-radius: 8px; overflow-x: auto;"><code id="json-preview">${JSON.stringify({ status, timestamp, uptime, database }, null, 2)}</code></pre>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: ${isDbConnected ? 'var(--status-green)' : 'var(--status-red)'}; text-transform: uppercase;" id="metric-db">
+          ${database}
+        </div>
       </div>
+
+      <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-line); border-radius: var(--radius); padding: 1.25rem 1.5rem;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.5rem;">
+          UPTIME
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.75rem; font-weight: 700; color: var(--text-main);" id="metric-uptime">
+          ${uptime}
+        </div>
+      </div>
+
+      <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-line); border-radius: var(--radius); padding: 1.25rem 1.5rem;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.5rem;">
+          TIMESTAMP (UTC)
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-muted); word-break: break-all; margin-top: 0.35rem;" id="metric-timestamp">
+          ${timestamp}
+        </div>
+      </div>
+    </div>
+
+    <!-- JSON Preview Section -->
+    <div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.725rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+        <span>// RAW JSON OUTPUT</span>
+        <button class="btn btn-ghost" style="font-size: 0.75rem;" onclick="copyToClipboard(document.getElementById('json-preview').textContent)">Copy Output</button>
+      </div>
+      <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.825rem; color: var(--text-muted); background: var(--bg-surface); padding: 1.25rem; border: 1px solid var(--border-line); border-radius: var(--radius); overflow-x: auto; margin: 0;"><code id="json-preview">${JSON.stringify({ status, timestamp, uptime, database }, null, 2)}</code></pre>
     </div>
   `;
 
@@ -129,22 +102,16 @@ export const getHealthPageHtml = (options: HealthPageOptions): string => {
             const isHealthy = data.status === 'OK';
             const isConnected = data.database === 'connected';
 
-            const statusBadge = document.getElementById('status-badge');
-            if (statusBadge) {
-              statusBadge.className = 'badge ' + (isHealthy ? 'badge-api-online' : 'badge-db-disconnected');
-              statusBadge.innerHTML = '<span class="dot ' + (isHealthy ? 'dot-cyan' : 'dot-red') + '"></span> ' + data.status;
-            }
-
             const metricStatus = document.getElementById('metric-status');
             if (metricStatus) {
               metricStatus.textContent = data.status;
-              metricStatus.style.color = isHealthy ? '#22d3ee' : '#f87171';
+              metricStatus.style.color = isHealthy ? 'var(--status-green)' : 'var(--status-red)';
             }
 
             const metricDb = document.getElementById('metric-db');
             if (metricDb) {
-              metricDb.textContent = data.database;
-              metricDb.style.color = isConnected ? '#4ade80' : '#f87171';
+              metricDb.textContent = data.database.toUpperCase();
+              metricDb.style.color = isConnected ? 'var(--status-green)' : 'var(--status-red)';
             }
 
             const metricUptime = document.getElementById('metric-uptime');
@@ -156,22 +123,21 @@ export const getHealthPageHtml = (options: HealthPageOptions): string => {
             const jsonPreview = document.getElementById('json-preview');
             if (jsonPreview) jsonPreview.textContent = JSON.stringify(data, null, 2);
 
-            showToast('Health data updated');
+            showToast('Diagnostics refreshed');
           }
         } catch (e) {
-          showToast('Failed to refresh health');
+          showToast('Failed to refresh');
         } finally {
-          if (btn) btn.textContent = '↻ Refresh Status';
+          if (btn) btn.textContent = '↻ Refresh';
         }
       }
 
-      // Automatically refresh health data every 5 seconds
-      setInterval(fetchHealth, 5000);
+      setInterval(fetchHealth, 10000);
     </script>
   `;
 
   return renderPageLayout({
-    title: 'API Health',
+    title: 'Health',
     activeNav: 'health',
     content,
     extraScripts,
