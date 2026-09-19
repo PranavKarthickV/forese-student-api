@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
+import { getErrorPageHtml } from '../views/errorPage';
 
 /**
  * Middleware to validate MongoDB ObjectId in request parameters (:id).
@@ -16,6 +17,20 @@ export const validateObjectId = (
     !mongoose.Types.ObjectId.isValid(id) ||
     !/^[0-9a-fA-F]{24}$/.test(id)
   ) {
+    if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.status(400).send(
+        getErrorPageHtml({
+          statusCode: 400,
+          title: 'Invalid Student ID',
+          message: `The student ID '${id}' is not a valid 24-character hexadecimal MongoDB ObjectId.`,
+          path: req.originalUrl,
+          method: req.method,
+        })
+      );
+      return;
+    }
+
     res.status(400).json({
       success: false,
       message: 'Invalid student ID format. Must be a valid 24-character hex string.',

@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Student } from '../models/Student';
+import { getStudentsPageHtml } from '../views/studentsPage';
+import { getStudentDetailPageHtml } from '../views/studentDetailPage';
+import { getErrorPageHtml } from '../views/errorPage';
 
 /**
  * @route   POST /api/students
@@ -54,6 +57,24 @@ export const getAllStudents = async (
   try {
     const students = await Student.find().sort({ createdAt: -1 });
 
+    if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.status(200).send(
+        getStudentsPageHtml({
+          students: students.map((s) => ({
+            _id: s._id.toString(),
+            name: s.name,
+            rollNumber: s.rollNumber,
+            department: s.department,
+            year: s.year,
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt,
+          })),
+        })
+      );
+      return;
+    }
+
     res.status(200).json({
       success: true,
       count: students.length,
@@ -79,10 +100,42 @@ export const getStudentById = async (
     const student = await Student.findById(id);
 
     if (!student) {
+      if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.status(404).send(
+          getErrorPageHtml({
+            statusCode: 404,
+            title: 'Student Not Found',
+            message: `Student with ID '${id}' was not found.`,
+            path: req.originalUrl,
+            method: req.method,
+          })
+        );
+        return;
+      }
+
       res.status(404).json({
         success: false,
         message: `Student with ID '${id}' not found.`,
       });
+      return;
+    }
+
+    if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.status(200).send(
+        getStudentDetailPageHtml({
+          student: {
+            _id: student._id.toString(),
+            name: student.name,
+            rollNumber: student.rollNumber,
+            department: student.department,
+            year: student.year,
+            createdAt: student.createdAt,
+            updatedAt: student.updatedAt,
+          },
+        })
+      );
       return;
     }
 

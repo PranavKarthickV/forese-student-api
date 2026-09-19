@@ -5,6 +5,8 @@ import dns from 'dns';
 import mongoose from 'mongoose';
 import studentRoutes from './routes/studentRoutes';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
+import { getLandingPageHtml } from './views/landingPage';
+import { getHealthPageHtml } from './views/healthPage';
 
 // Load environment variables
 dotenv.config();
@@ -21,15 +23,30 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health Check Endpoint
+// Root Landing Page (HTML Dashboard)
+app.get('/', (req: Request, res: Response) => {
+  const isDbConnected = mongoose.connection.readyState === 1;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.status(200).send(getLandingPageHtml({ isDbConnected, port: PORT }));
+});
+
+// Health Check Endpoint (Content negotiation: Browser -> HTML, API Client -> JSON)
 app.get('/api/health', (req: Request, res: Response) => {
   const isDbConnected = mongoose.connection.readyState === 1;
-  res.status(200).json({
+  const healthData = {
     status: isDbConnected ? 'OK' : 'Degraded',
     timestamp: new Date().toISOString(),
     uptime: `${process.uptime().toFixed(2)}s`,
     database: isDbConnected ? 'connected' : 'disconnected',
-  });
+  };
+
+  if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.status(200).send(getHealthPageHtml(healthData));
+    return;
+  }
+
+  res.status(200).json(healthData);
 });
 
 // Student API Routes

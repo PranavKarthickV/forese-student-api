@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { getErrorPageHtml } from '../views/errorPage';
 
 interface MongoError extends Error {
   code?: number;
@@ -9,8 +10,23 @@ interface MongoError extends Error {
 
 /**
  * 404 handler for routes that do not exist.
+ * Serves a polished HTML 404 page for browser requests, or JSON for API clients.
  */
 export const notFoundHandler = (req: Request, res: Response): void => {
+  if (req.headers.accept?.includes('text/html') && req.query.format !== 'json') {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.status(404).send(
+      getErrorPageHtml({
+        statusCode: 404,
+        title: 'Endpoint not found',
+        message: 'The requested endpoint does not exist on this API service.',
+        path: req.originalUrl,
+        method: req.method,
+      })
+    );
+    return;
+  }
+
   res.status(404).json({
     success: false,
     message: `Resource not found: ${req.method} ${req.originalUrl}`,
